@@ -898,6 +898,23 @@ def runfetchcmd(cmd, d, quiet=False, cleanup=None, log=None, workdir=None):
 
     return output
 
+def python_fetchenv_start(d):
+    exportvars = FETCH_EXPORT_VARS
+
+    backup = os.environ.copy()
+
+    origenv = d.getVar("BB_ORIGENV", False)
+    for var in exportvars:
+        val = d.getVar(var) or (origenv and origenv.getVar(var))
+        if val:
+            os.environ[var] = val
+
+    return backup
+
+def python_fetchenv_finish(d, backup):
+    for var in backup:
+        os.environ[var] = backup[var]
+
 def check_network_access(d, info, url):
     """
     log remote network access, and error if BB_NO_NETWORK is set or the given
