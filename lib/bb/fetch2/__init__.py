@@ -36,6 +36,25 @@ logger = logging.getLogger("BitBake.Fetcher")
 CHECKSUM_LIST = [ "md5", "sha256", "sha1", "sha384", "sha512" ]
 SHOWN_CHECKSUM_LIST = ["sha256"]
 
+FETCH_EXPORT_VARS = ['HOME', 'PATH',
+     'HTTP_PROXY', 'http_proxy',
+     'HTTPS_PROXY', 'https_proxy',
+     'FTP_PROXY', 'ftp_proxy',
+     'FTPS_PROXY', 'ftps_proxy',
+     'NO_PROXY', 'no_proxy',
+     'ALL_PROXY', 'all_proxy',
+     'GIT_PROXY_COMMAND',
+     'GIT_SSH',
+     'GIT_SSL_CAINFO',
+     'GIT_SMART_HTTP',
+     'SSH_AUTH_SOCK', 'SSH_AGENT_PID',
+     'SOCKS5_USER', 'SOCKS5_PASSWD',
+     'DBUS_SESSION_BUS_ADDRESS',
+     'P4CONFIG',
+     'AWS_ACCESS_KEY_ID',
+     'AWS_SECRET_ACCESS_KEY',
+     'AWS_DEFAULT_REGION']
+
 class BBFetchException(Exception):
     """Class all fetch exceptions inherit from"""
     def __init__(self, message):
@@ -820,24 +839,7 @@ def runfetchcmd(cmd, d, quiet=False, cleanup=None, log=None, workdir=None):
     # rather than host provided
     # Also include some other variables.
     # FIXME: Should really include all export varaiables?
-    exportvars = ['HOME', 'PATH',
-                  'HTTP_PROXY', 'http_proxy',
-                  'HTTPS_PROXY', 'https_proxy',
-                  'FTP_PROXY', 'ftp_proxy',
-                  'FTPS_PROXY', 'ftps_proxy',
-                  'NO_PROXY', 'no_proxy',
-                  'ALL_PROXY', 'all_proxy',
-                  'GIT_PROXY_COMMAND',
-                  'GIT_SSH',
-                  'GIT_SSL_CAINFO',
-                  'GIT_SMART_HTTP',
-                  'SSH_AUTH_SOCK', 'SSH_AGENT_PID',
-                  'SOCKS5_USER', 'SOCKS5_PASSWD',
-                  'DBUS_SESSION_BUS_ADDRESS',
-                  'P4CONFIG',
-                  'AWS_ACCESS_KEY_ID',
-                  'AWS_SECRET_ACCESS_KEY',
-                  'AWS_DEFAULT_REGION']
+    exportvars = FETCH_EXPORT_VARS
 
     if not cleanup:
         cleanup = []
